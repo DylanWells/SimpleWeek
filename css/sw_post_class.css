@@ -1,0 +1,20 @@
+div#sw_timeday_outer {
+    text-align: center;
+}
+div[id^="sw_time_instance_"],
+div[id^="sw_day_instance_"] {
+    margin: 10px;
+}
+div[id^="sw_day_instance_"] ul {
+    display: inline-block;
+    text-align: left;
+}
+div[id^="sw_day_instance_"] ul li span {
+    display: block;
+    padding: 7px;
+    margin-top: 10px;
+}
+div[id^="sw_day_instance_"] ul li span label {
+    position: relative;
+    bottom: 2px;
+}

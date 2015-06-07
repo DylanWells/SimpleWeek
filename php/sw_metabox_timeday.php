@@ -13,6 +13,11 @@ function sw_add_timeday_metabox( $post ) {
 }
 add_action( 'add_meta_boxes', 'sw_add_timeday_metabox' );
 
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+
 function sw_timeday_metabox_output() {
 	global $post;
 	$days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
@@ -20,10 +25,19 @@ function sw_timeday_metabox_output() {
 	// Use nonce for verification
 	wp_nonce_field( 'my_sw_timeday_metabox_nonce', 'sw_timeday_metabox_nonce' );
 
-	add_post_meta( $post->ID, '_instances', 1, true );
+	//add_post_meta( $post->ID, '_instances', 1, true );
+
+	//intval( get_post_meta( $post->ID, '_instances', true) );
+
+	if ( ! add_post_meta( $post->ID, '_instances', 1, true ) ) {
+		update_post_meta( $post->ID, '_instances', ( get_post_meta( $post->ID, '_instances', true) ) );
+	}
 	$instances = intval( get_post_meta( $post->ID, '_instances', true) );
 
-	?><div id="sw_timeday_outer" style="text-align:center;"><?php
+	?>
+		<div id="sw_timeday_outer">
+		<script> console.log('<?php echo intval( get_post_meta( $post->ID, '_instances', true) ) ?>'); </script>
+	<?php
 
 	printf('<div id="sw_timeday_inner" data-instances="%s">', $instances);
 
@@ -37,7 +51,7 @@ function sw_timeday_metabox_output() {
 
 		printf( '<div id="sw_timeday_instance_%s">', $i);
 
-			printf( '<div id="sw_time_instance_%s" style="margin:10px;">', $i );
+			printf( '<div id="sw_time_instance_%s">', $i );
 
 				printf( '<select name="sw_hour_%s">', $i );
 				for ( $hour = 1; $hour <= 12; $hour++ ) {
@@ -68,14 +82,14 @@ function sw_timeday_metabox_output() {
 
 			echo '</div>';
 
-			printf( '<div id="sw_day_instance_%s"style="margin:10px;"><ul style="display:inline-block;text-align: left;">', $i );
+			printf( '<div id="sw_day_instance_%s"><ul>', $i );
 			foreach( $days as $day ) {
 				$day_metakey = 'sw_' . $day . '_' . $i;
 				$set_day = get_post_meta( $post->ID, $day_metakey, true);
 				$checked = $set_day === 'on' ? 'checked="checked"' : '';
-				printf( '<li><span style="display:block;padding:7px;margin-top:10px;">
+				printf( '<li><span>
 							<input type="checkbox" %s name="sw_%s_%s">
-							<label style="position:relative;bottom:2px" for="sw_%s_%s">%s</label>
+							<label for="sw_%s_%s">%s</label>
 						</span></li>',
 					$checked, $day, $i, $day, $i, $day );
 			}
@@ -84,7 +98,46 @@ function sw_timeday_metabox_output() {
 		echo '</div>';
 	}
 	?></div>
-		<button class="button button-large button-primary">+</button>
+		<a class="button button-large button-primary" onclick="sw_add_instance()">+</a>
+		<script>
+			function sw_add_instance() {
+				var $ =jQuery.noConflict();
+				$(document).ready(function() {
+					var old_ins = <?php echo intval( get_post_meta( $post->ID, '_instances', true) ); ?>,
+						_ins = old_ins + 1,
+						old_ins_len = old_ins.toString().length,
+						clone_id = 'sw_timeday_instance_'+_ins;
+					//alert( _ins + ' ' + old_ins );
+
+					var clone = $( 'div#sw_timeday_instance_1' ).clone();
+						clone.attr('id',clone_id).find('[id^="sw_"],[name^="sw_"],label[for^="sw_"]').each( function() {
+						if( $(this).attr('id') ) {
+							var old_id = $(this).attr('id'),
+								new_id = old_id.slice(0,old_id.length-old_ins_len) + _ins;
+							$(this).attr('id',new_id);
+						} else if( $(this).attr('name') ) {
+							var old_name = $(this).attr('name'),
+								new_name = old_name.toString().slice(0,old_name.length-old_ins_len) + _ins;
+							$(this).attr('name',new_name);
+
+							if( $(this).is('select') ) {
+								$(this)[0].selectedIndex = -1;
+							} else if ( $(this).is('input[type="checkbox"]:checked') ) {
+								$(this).click();
+							}
+						} else {
+							var old_for = $(this).attr('for'),
+								new_for = old_for.toString().slice(0,old_for.length-old_ins_len) + _ins;
+							$(this).attr('for',new_for);
+						}
+					});
+
+					$('div#sw_timeday_inner').append(clone);
+				});
+				<?php ++$instances; update_post_meta( $post->ID, '_instances', $instances  ); ?>
+				console.log('<?php echo intval( get_post_meta( $post->ID, '_instances', true) ) ?>');
+			}
+		</script>
 	<?php
 	echo '</div>';
 
@@ -95,6 +148,11 @@ function sw_timeday_metabox_output() {
 			echo '<h1>'.$the_meta.'</h1>';
 	*/
 }
+
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 
 function sw_timeday_metabox_save( $post_id ) {
 	global $post;

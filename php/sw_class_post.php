@@ -5,6 +5,19 @@ class SW_ClassPost {
 
 	public function __construct() {
 		$this->sw_register_post_type();
+		add_action('admin_head', array('SW_ClassPost','sw_add_classpost_admin_style'));
+	}
+
+	public function sw_add_classpost_admin_style() {
+		$src = plugins_url('simple-week/css/sw_post_class.css');
+		$handle = "sw_classpost_css";
+		wp_register_script($handle, $src);
+		wp_enqueue_style($handle, $src, array(), false, false);
+		?>
+		<script>
+			console.log( ' <?php echo $src; ?> ')
+		</script>
+		<?php
 	}
 
 	public static function sw_add_submenu($parent) {
