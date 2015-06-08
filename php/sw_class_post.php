@@ -3,31 +3,37 @@
 
 class SW_ClassPost {
 
-	public function __construct() {
+	public function __construct( ) {
 		$this->sw_register_post_type();
-		add_action('admin_head', array('SW_ClassPost','sw_add_classpost_admin_style'));
+		add_action( 'admin_head', array( 'SW_ClassPost','sw_post_class_admin_enqueue' ) );
 	}
 
-	public function sw_add_classpost_admin_style() {
-		$src = plugins_url('simple-week/css/sw_post_class.css');
-		$handle = "sw_classpost_css";
-		wp_register_script($handle, $src);
-		wp_enqueue_style($handle, $src, array(), false, false);
-		?>
-		<script>
-			console.log( ' <?php echo $src; ?> ')
-		</script>
-		<?php
+	public function sw_post_class_admin_enqueue( ) {
+
+		// Admin styling
+		$admin_style_src = plugins_url( 'simple-week/css/sw_post_class_admin_styles.css' );
+		$admin_style_handle = 'sw_post_class_admin_styles';
+		wp_register_script( $admin_style_handle, $admin_style_src );
+		wp_enqueue_style( $admin_style_handle, $admin_style_src, array(), false, false );
+
+		// Admin scripts
+		$add_ins_src = plugins_url( 'simple-week/js/sw_post_class_add_instance.js' );
+		$add_ins_handle = 'sw_post_class_script_add_instance';
+		wp_register_script( $add_ins_handle, $add_ins_src );
+		wp_enqueue_script( $add_ins_handle, $add_ins_src, array(), false, false );
+
 	}
 
-	public static function sw_add_submenu($parent) {
+	public static function sw_add_submenu( $parent ) {
+
 		add_submenu_page( $parent, 'SimpleWeek Classes', 'Classes',
 			'manage_options', 'edit.php?post_type=sw_class', NULL );
 		add_submenu_page( $parent, 'Add SimpleWeek Class', 'Add Class',
 			'manage_options', 'post-new.php?post_type=sw_class', NULL );
+
 	}
 
-	public function sw_register_post_type() {
+	public function sw_register_post_type( ) {
 		$labels = array(
 			'name' => 'Classes',
 			'singular_name' => 'Class',

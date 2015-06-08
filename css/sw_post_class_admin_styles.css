@@ -1,0 +1,73 @@
+div#sw_timeday_outer {
+    text-align: center;
+}
+div[id^="sw_time_instance_"],
+div[id^="sw_day_instance_"] {
+    margin: 10px;
+    padding-top: 10px;
+}
+div[id^="sw_day_instance_"] ul {
+    display: inline-block;
+    text-align: left;
+    min-height: 90px;
+}
+div[id^="sw_day_instance_"] ul li {
+    display: inline-block;
+    min-width: 50%;
+    float: left;
+    clear: none;
+}
+div[id^="sw_day_instance_"] ul li:nth-child(2n) {
+    clear: right;
+}
+div[id^="sw_day_instance_"] ul li span {
+    display: block;
+    padding: 5px;
+    position: relative;
+    left: 25%;
+}
+div[id^="sw_day_instance_"] ul li span label {
+    position: relative;
+    bottom: 2px;
+}
+@media only screen and (min-width: 640px) {
+    div[id^="sw_day_instance_"] ul {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 100%;
+    }
+
+    div[id^="sw_day_instance_"] ul li {
+        float: left;
+        clear: none;
+        min-width: 25%;
+    }
+    div[id^="sw_day_instance_"] ul li:nth-child(5n) {
+        clear: left;
+    }
+    div[id^="sw_day_instance_"] ul li span {
+        left: 12.5%;
+    }
+}
+
+
+/* TOP BUTTONS */
+
+div.sw_timeday_instance_topbtns {
+    height: 20px;
+}
+div.sw_timeday_instance_topbtns span.sw_active_box {
+    position: absolute;
+    left: 5%;
+    font-weight: bold;
+    padding-top: 1.5%;
+}
+div.sw_timeday_instance_topbtns span.sw_active_box label {
+    position: relative;
+    bottom: 2.5px;
+}
+div.sw_timeday_instance_topbtns a[id^="sw_timeday_delete_btn"] {
+    position: absolute;
+    right: 5%;
+}
