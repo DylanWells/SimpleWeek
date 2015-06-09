@@ -25,9 +25,9 @@ function sw_timeday_metabox_output() {
 	// Use nonce for verification
 	wp_nonce_field( 'my_sw_timeday_metabox_nonce', 'sw_timeday_metabox_nonce' );
 
-	add_post_meta( $post->ID, '_instances', 1, true );
+	add_post_meta( $post->ID, '_instances', 0, true );
 	$instances_meta = intval( get_post_meta( $post->ID, '_instances', true) );
-	$instances =  $instances_meta === 0 ? 1 : $instances_meta;
+	$instances =  $instances_meta;
 
 	update_post_meta( $post->ID, '_deleted', Array(), true );
 
@@ -37,7 +37,7 @@ function sw_timeday_metabox_output() {
 
 	printf('<div id="sw_timeday_inner" data-instances="%s">', $instances);
 
-	for ( $i = 1; $i <= $instances; $i++ ) {
+	for ( $i = 0; $i <= $instances; $i++ ) {
 		$hour_metakey = 'sw_hour_' . $i;
 		$minute_metakey = 'sw_minute_' . $i;
 		$ampm_metakey = 'sw_ampm_' . $i;
@@ -45,7 +45,8 @@ function sw_timeday_metabox_output() {
 		$set_minute = get_post_meta( $post->ID, $minute_metakey, true);
 		$set_ampm = get_post_meta( $post->ID, $ampm_metakey, true);
 
-		printf( '<div id="sw_timeday_instance_%s" data-index="%s">', $i, $i);
+		printf( '<div id="sw_timeday_instance_%s" data-index="%s" %s>', $i, $i,
+				$i === 0 ? 'class="sw_blank_instance"' : '');
 		?>
 
 		<div class="sw_timeday_instance_topbtns">
@@ -118,9 +119,14 @@ function sw_timeday_metabox_output() {
 						_ins = old_ins + 1,
 						clone_id = 'sw_timeday_instance_'+_ins;
 
+					//if( old_ins === 0 ) {
+					//	_ins_container.attr('data-instances',1);
+					//	return;
+					//}
+
 					//console.log( 'old_ins: ' + old_ins + '\t' + '_ins: ' + _ins );
 
-					var clone = $( 'div#sw_timeday_instance_1' ).clone();
+					var clone = $( 'div#sw_timeday_instance_0' ).clone().removeClass('sw_blank_instance');
 
 						clone.attr('id',clone_id).attr('data-index',_ins)
 						.find('[id^="sw_"],[name^="sw_"],label[for^="sw_"]').each( function() {
@@ -174,17 +180,22 @@ function sw_timeday_metabox_output() {
 
 			function sw_delete_instance( instance_id ) {
 				var $ =jQuery.noConflict(),
+					_ins_container = $('div#sw_timeday_inner'),
 					delete_index = parseInt( $( instance_id ).attr('data-index') ),
 					swap_index = delete_index + 1,
 					ins_container = $('div#sw_timeday_inner'),
 					old_num_ins = parseInt ( ins_container.attr('data-instances') );
 
-
+				//if( old_num_ins === 1 ) {
+				//	ins_container.attr( 'data-instances', 0 );
+				//	return 0;
+				//}
 
 				console.log( 'sw_delete_instance( instance_id )' + '\n' +
 					'instance_id: ' + instance_id + '\n' +
 					'delete index: ' + delete_index + '\t' + 'swap_index: ' + swap_index + '\n' +
 					'---------------------------------' );
+
 
 				$(instance_id).remove();
 
@@ -202,9 +213,9 @@ function sw_timeday_metabox_output() {
 					.each(function() {
 
 						if( $(this).attr('id') ) {
-							var old_id = $(this).attr('id'),
-								new_id = old_id.slice(0,old_id.length-from_len) + to;
-							$(this).attr('id',new_id);
+							var old_id = $( this ).attr( 'id' ),
+								new_id = old_id.slice (0, old_id.length-from_len ) + to;
+							$( this ).attr( 'id',new_id );
 
 							//console.log( 'old_id: ' + old_id + '\t' + 'new_id: ' + new_id );
 
@@ -213,13 +224,13 @@ function sw_timeday_metabox_output() {
 							}
 						} else if( $(this).attr('name') ) {
 							var old_name = $(this).attr('name'),
-								new_name = old_name.toString().slice(0,old_name.length-from_len) + to;
+								new_name = old_name.toString().slice( 0, old_name.length-from_len ) + to;
 							$(this).attr('name',new_name);
 
 							//console.log( 'old_name: ' + old_name + '\t' + 'new_name: ' + new_name );
 						} else {
 							var old_for = $(this).attr('for'),
-								new_for = old_for.toString().slice(0,old_for.length-from_len) + to;
+								new_for = old_for.toString().slice( 0, old_for.length-from_len ) + to;
 							$(this).attr('for',new_for);
 
 							//console.log( 'old_for: ' + old_for + '\t' + 'new_for: ' + new_for );
@@ -229,7 +240,9 @@ function sw_timeday_metabox_output() {
 
 				}
 
-				return old_num_ins - 1;
+				ins_container.attr( 'data-instances', old_num_ins - 1 );
+
+				return old_num_ins === 0 ? 0 : old_num_ins - 1;
 
 			}
 
@@ -268,8 +281,8 @@ function sw_timeday_metabox_output() {
 
 	echo '</div>';
 
-	echo '<h1>' . get_post_meta( $post->ID, '_instances', true) . '</h1>';
-	echo '<pre>'; print_r($_POST); echo '</pre>';
+	//echo '<h1>' . get_post_meta( $post->ID, '_instances', true) . '</h1>';
+	//echo '<pre>'; print_r($_POST); echo '</pre>';
 
 //	$metatest = get_post_meta( $post->ID );
 //	foreach( $metatest as $meta ) {
@@ -396,6 +409,10 @@ function sw_timeday_metabox_save( $post_id ) {
 	$days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
 
 	for($i=1; $i<=$num_instances; $i++) {
+
+		$active_field = 'sw_instance_active_' . $i;
+		update_post_meta( $post->ID, $active_field, esc_attr( $_POST[ $active_field ] ) );
+
 		$hour_field = 'sw_hour_' . $i;
 		$minute_field = 'sw_minute_' . $i;
 		$ampm_field = 'sw_ampm_' . $i;

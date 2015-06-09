@@ -71,3 +71,10 @@ div.sw_timeday_instance_topbtns a[id^="sw_timeday_delete_btn"] {
     position: absolute;
     right: 5%;
 }
+
+
+/* HIDE WHEN 0 INSTANCES */
+
+div#sw_timeday_inner div#sw_timeday_instance_0.sw_blank_instance {
+    display: none;
+}

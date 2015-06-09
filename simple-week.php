@@ -100,7 +100,6 @@ add_action('admin_init', function() {
 });
 
 
-
 function sw_increment_instance() {
 
 	global $wpdb;
@@ -129,7 +128,8 @@ function sw_deleted_instances() {
 	$sw_deleted_string = '';
 
 	$num_instances = intval( get_post_meta( $sw_post_id, '_instances', true) );
-	update_post_meta( $sw_post_id, '_instances', $num_instances - 1);
+	$num_instances = $num_instances === 0 ? 0 : $num_instances - 1;
+	update_post_meta( $sw_post_id, '_instances', $num_instances);
 
 	//for( $i = 0; $i < $num_instances  - intval( $sw_deleted ); $i++)
 	//	sw_timeday_delete_meta( $sw_deleted + $i, $sw_post_id );
