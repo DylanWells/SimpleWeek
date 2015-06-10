@@ -38,12 +38,17 @@ function sw_timeday_metabox_output() {
 	printf('<div id="sw_timeday_inner" data-instances="%s">', $instances);
 
 	for ( $i = 0; $i <= $instances; $i++ ) {
+
 		$hour_metakey = 'sw_hour_' . $i;
 		$minute_metakey = 'sw_minute_' . $i;
 		$ampm_metakey = 'sw_ampm_' . $i;
+
+		$set_active = get_post_meta( $post->ID, 'sw_instance_active_' . $i, true);
+
 		$set_hour = get_post_meta( $post->ID, $hour_metakey, true);
 		$set_minute = get_post_meta( $post->ID, $minute_metakey, true);
 		$set_ampm = get_post_meta( $post->ID, $ampm_metakey, true);
+
 
 		printf( '<div id="sw_timeday_instance_%s" data-index="%s" %s>', $i, $i,
 				$i === 0 ? 'class="sw_blank_instance"' : '');
@@ -52,9 +57,9 @@ function sw_timeday_metabox_output() {
 		<div class="sw_timeday_instance_topbtns">
 			<?php
 			printf('<span class="sw_active_box">
-						<input type="checkbox" checked="checked" name="sw_instance_active_%s">
+						<input type="checkbox" name="sw_instance_active_%s" %s>
 						<label for="sw_instance_active_%s">Active</label>
-					</span>',$i, $i);
+					</span>',$i, $set_active === 'on' || $i === 0 ? 'checked="checked"' : '', $i);
 			printf('<a id="sw_timeday_delete_btn_%s" data-index="%s" class="button button-large button-primary sw_ins_delete_btn">-</a>', $i, $i);
 			?>
 		</div>
@@ -191,10 +196,10 @@ function sw_timeday_metabox_output() {
 				//	return 0;
 				//}
 
-				console.log( 'sw_delete_instance( instance_id )' + '\n' +
-					'instance_id: ' + instance_id + '\n' +
-					'delete index: ' + delete_index + '\t' + 'swap_index: ' + swap_index + '\n' +
-					'---------------------------------' );
+//				console.log( 'sw_delete_instance( instance_id )' + '\n' +
+//					'instance_id: ' + instance_id + '\n' +
+//					'delete index: ' + delete_index + '\t' + 'swap_index: ' + swap_index + '\n' +
+//					'---------------------------------' );
 
 
 				$(instance_id).remove();
@@ -418,18 +423,17 @@ function sw_timeday_metabox_save( $post_id ) {
 		$ampm_field = 'sw_ampm_' . $i;
 		$time_fields = [ $hour_field, $minute_field, $ampm_field ];
 
-		foreach($time_fields as $time_field) {
+		foreach($time_fields as $time_field)
 			if( isset( $_POST[ $time_field ] ) )
 				update_post_meta( $post->ID, $time_field, esc_attr( $_POST[ $time_field ] ) );
-		}
 
 		$day_vals = [];
 		foreach( $days as $day )
 			array_push( $day_vals, 'sw_' . $day . '_' . $i );
 
-		foreach( $day_vals as $val ) {
+		foreach( $day_vals as $val )
 			update_post_meta( $post->ID, $val, esc_attr( $_POST[ $val ] ) );
-		}
+
 	}
 
 	delete_post_meta( $post->ID, '_deleted', true);

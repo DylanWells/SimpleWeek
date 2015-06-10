@@ -3,7 +3,7 @@
 /*
 Plugin Name: SimpleWeek
 Plugin URI: http://dylandoes.com/simple-week`
-Description:
+Description: Hmm...
 Version: 0.1
 Author: Dylan Wells
 Author URI: http://dylandoes.com
@@ -89,15 +89,6 @@ class SW_Init {
 
 	}
 }
-
-add_action( 'admin_menu', function() {
-	SW_Init::sw_add_admin_menu();
-});
-
-add_action('admin_init', function() {
-	$simple_week = new SW_Init();
-	$simple_week->sw_settings_init();
-});
 
 
 function sw_increment_instance() {
@@ -189,5 +180,14 @@ function sw_timeday_delete_meta( $index, $from_post_id ) {
 		delete_post_meta( $from_post_id, $val );
 
 }
+
+add_action( 'admin_menu', function() {
+	SW_Init::sw_add_admin_menu();
+});
+
+add_action('admin_init', function() {
+	$simple_week = new SW_Init();
+	$simple_week->sw_settings_init();
+});
 
 ?>

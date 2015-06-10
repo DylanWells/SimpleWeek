@@ -5,7 +5,7 @@ class SW_ClassPost {
 
 	public function __construct( ) {
 		$this->sw_register_post_type();
-		add_action( 'admin_head', array( 'SW_ClassPost','sw_post_class_admin_enqueue' ) );
+		add_action( 'admin_enqueue_scripts', array( 'SW_ClassPost','sw_post_class_admin_enqueue' ) );
 	}
 
 	public function sw_post_class_admin_enqueue( ) {
@@ -13,7 +13,7 @@ class SW_ClassPost {
 		// Admin styling
 		$admin_style_src = plugins_url( 'simple-week/css/sw_post_class_admin_styles.css' );
 		$admin_style_handle = 'sw_post_class_admin_styles';
-		wp_register_script( $admin_style_handle, $admin_style_src );
+		wp_register_style( $admin_style_handle, $admin_style_src );
 		wp_enqueue_style( $admin_style_handle, $admin_style_src, array(), false, false );
 
 		// Admin scripts
