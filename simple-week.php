@@ -122,20 +122,6 @@ function sw_deleted_instances() {
 	$num_instances = $num_instances === 0 ? 0 : $num_instances - 1;
 	update_post_meta( $sw_post_id, '_instances', $num_instances);
 
-	//for( $i = 0; $i < $num_instances  - intval( $sw_deleted ); $i++)
-	//	sw_timeday_delete_meta( $sw_deleted + $i, $sw_post_id );
-
-//	$duplicate = false;
-
-//	foreach( $sw_delete_arr as $unique )
-//		if( $unique === $sw_deleted )
-//			$duplicate = true;
-//
-//	if( !$duplicate ) {
-//		array_push( $sw_delete_arr, $sw_deleted );
-//		update_post_meta( $sw_post_id, '_deleted', $sw_delete_arr );
-//	}
-
 	array_push( $sw_delete_arr, $sw_deleted );
 	update_post_meta( $sw_post_id, '_deleted', $sw_delete_arr );
 
@@ -165,19 +151,17 @@ function sw_timeday_delete_meta( $index, $from_post_id ) {
 	$time_fields = [ $hour_field, $minute_field, $ampm_field ];
 
 	$days = ['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
-	$day_vals = [];
-	// this doesn't need day_vals
-	// just do $day = 'sw_' . $day . '_' . $index
-	foreach( $days as $day )
-		array_push( $day_vals, 'sw_' . $day . '_' . $index );
-
 
 	foreach($time_fields as $time_field)
 		delete_post_meta( $from_post_id, $time_field );
 
+	foreach( $days as $day ) {
+		$day = 'sw_' . $day . '_' . $index;
+		delete_post_meta( $from_post_id, $day );
+	}
 
-	foreach( $day_vals as $val )
-		delete_post_meta( $from_post_id, $val );
+
+
 
 }
 
