@@ -1,0 +1,72 @@
+.sw_color_picker_box {
+    text-align: center;
+}
+.sw_color_picker_box a.wp-color-result,
+.sw_color_picker_box span.wp-picker-input-wrap {
+    margin: 10px;
+}
+
+#sw_textfield {
+    width: 100%;
+}
+
+#sw_key_descrip_enabled_box {
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+}
+
+
+label[for="sw_textfield"],
+label[for="sw_textarea"] {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+    margin: 10px;
+}
+
+textarea#sw_class_descrip {
+    width: 100%;
+    height: 80px;
+    resize: none;
+}
+
+table.sw_active_classes {
+    border-spacing: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+table.sw_active_classes td,
+table.sw_active_classes th {
+    padding: 5%;
+}
+
+table.sw_active_classes td.sw_tcell_active,
+table.sw_active_classes td.sw_tcell_title {
+    border-top: 1px solid #eee;
+}
+table.sw_active_classes td.sw_tcell_active {
+    text-align: center;
+    max-width: 20px;
+    border-right: 1px solid #eee;
+}
+
+table.sw_active_classes td.sw_tcell_title {
+    text-align: center;
+    min-width: 150px;
+}
+
+col.sw_col_active {
+    width: 75px;
+}
+
+col.sw_col_title {
+
+}
+
+div#sw_no_classes span {
+    text-align: center;
+    width: 100%;
+    display: inline-block;
+    padding: 20px 0;
+}

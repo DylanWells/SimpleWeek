@@ -13,14 +13,15 @@ define( 'SIMPLEWEEK_PATH', dirname(__FILE__) );
 
 
 // Post types
-include SIMPLEWEEK_PATH . '/php/' . 'sw_category_post.php';
-include SIMPLEWEEK_PATH . '/php/' . 'sw_class_post.php';
+include SIMPLEWEEK_PATH . '/php/' . 'sw_post_category.php';
+include SIMPLEWEEK_PATH . '/php/' . 'sw_post_class.php';
 
 // Metaboxes
-include SIMPLEWEEK_PATH . '/php/' . 'sw_color_picker.php';
-include SIMPLEWEEK_PATH . '/php/' . 'sw_textboxes.php';
+include SIMPLEWEEK_PATH . '/php/' . 'sw_metabox_color_picker.php';
+include SIMPLEWEEK_PATH . '/php/' . 'sw_metabox_text_inputs.php';
 include SIMPLEWEEK_PATH . '/php/' . 'sw_metabox_category.php';
 include SIMPLEWEEK_PATH . '/php/' . 'sw_metabox_timeday.php';
+include SIMPLEWEEK_PATH . '/php/' . 'sw_metabox_classview.php';
 
 
 class SW_Init {
@@ -54,7 +55,6 @@ class SW_Init {
 			'sw_plugin_options',
 			'sw_plugin_options_section'
 		);
-
 	}
 
 	function sw_text_field_0_render(  ) {
@@ -62,17 +62,14 @@ class SW_Init {
 		$options = get_option( 'sw_settings' );
 		?>
 		<input id="sw_text" type='text' name='sw_settings[sw_text_field_0]' value='<?php echo $options['sw_text_field_0']; ?>'>
-	<?php
-
+		<?php
 	}
 
 	function sw_settings_section_callback() {
 
 	}
 
-
 	function sw_options_page(  ) {
-
 		?>
 		<form action='options.php' method='post' enctype="multipart/form-data">
 
@@ -85,11 +82,9 @@ class SW_Init {
 			?>
 
 		</form>
-	<?php
-
+		<?php
 	}
 }
-
 
 function sw_increment_instance() {
 
@@ -103,7 +98,6 @@ function sw_increment_instance() {
 	echo $sw_instances . ' [ID = ' . $sw_post_id . ']';
 
 	wp_die();
-
 }
 
 add_action( 'wp_ajax_nopriv_sw_increment_instance', 'sw_increment_instance' );
@@ -115,12 +109,14 @@ function sw_deleted_instances() {
 
 	$sw_deleted = $_POST['sw_deleted'];
 	$sw_post_id = $_POST['sw_post_id'];
-	$sw_delete_arr = get_post_meta( $sw_post_id, '_deleted', true);
+	$sw_delete_arr = get_post_meta( $sw_post_id, '_deleted', true );
 	$sw_deleted_string = '';
+
+	sw_timeday_delete_meta( $sw_deleted, $sw_post_id );
 
 	$num_instances = intval( get_post_meta( $sw_post_id, '_instances', true) );
 	$num_instances = $num_instances === 0 ? 0 : $num_instances - 1;
-	update_post_meta( $sw_post_id, '_instances', $num_instances);
+	update_post_meta( $sw_post_id, '_instances', $num_instances );
 
 	array_push( $sw_delete_arr, $sw_deleted );
 	update_post_meta( $sw_post_id, '_deleted', $sw_delete_arr );
@@ -134,16 +130,11 @@ function sw_deleted_instances() {
 
 	wp_die();
 }
+
 add_action( 'wp_ajax_nopriv_sw_deleted_instances', 'sw_deleted_instances' );
 add_action( 'wp_ajax_sw_deleted_instances', 'sw_deleted_instances' );
 
 function sw_timeday_delete_meta( $index, $from_post_id ) {
-
-	?>
-	<script>
-		console.log('sw_timeday_delete_meta: INDEX = ' + '<?php echo $index ?>');
-	</script>
-	<?php
 
 	$hour_field = 'sw_hour_' . $index;
 	$minute_field = 'sw_minute_' . $index;
@@ -159,10 +150,6 @@ function sw_timeday_delete_meta( $index, $from_post_id ) {
 		$day = 'sw_' . $day . '_' . $index;
 		delete_post_meta( $from_post_id, $day );
 	}
-
-
-
-
 }
 
 add_action( 'admin_menu', function() {

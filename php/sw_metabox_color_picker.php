@@ -14,7 +14,7 @@ function wdm_meta_box_callback( $post ) {
 
 	?>
 
-	<div class="custom_meta_box">
+	<div class="sw_color_picker_box">
 	<p>
 	<label>Select Category Color: </label><br>
 	<input class="color-field" type="text" name="post_bg" value="<?php echo '#'.$color; ?>"/>

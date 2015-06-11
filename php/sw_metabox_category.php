@@ -29,6 +29,7 @@ function sw_category_metabox_output( $post ) {
 		)
 	);
 
+
 	if ( !empty( $parents ) ) {
 		$selected_title = get_the_title( get_post_meta( $post->ID, 'sw_category', true ) );
 

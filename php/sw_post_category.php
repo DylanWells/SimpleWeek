@@ -5,6 +5,23 @@ class SW_CategoryPost {
 
 	public function __construct() {
 		$this->sw_register_post_type();
+		add_action( 'admin_enqueue_scripts', array( 'SW_CategoryPost','sw_post_category_admin_enqueue' ) );
+	}
+
+	public function sw_post_category_admin_enqueue( ) {
+
+		// Admin styling
+		$admin_style_src = plugins_url( 'simple-week/css/sw_post_category_admin_styles.css' );
+		$admin_style_handle = 'sw_post_category_admin_styles';
+		wp_register_style( $admin_style_handle, $admin_style_src );
+		wp_enqueue_style( $admin_style_handle, $admin_style_src, array(), false, false );
+
+		// Admin scripts
+//		$add_ins_src = plugins_url( 'simple-week/js/sw_post_class_add_instance.js' );
+//		$add_ins_handle = 'sw_post_class_script_add_instance';
+//		wp_register_script( $add_ins_handle, $add_ins_src );
+//		wp_enqueue_script( $add_ins_handle, $add_ins_src, array(), false, false );
+
 	}
 
 	public static function sw_add_submenu($parent) {
