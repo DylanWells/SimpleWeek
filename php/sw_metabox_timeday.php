@@ -56,19 +56,20 @@ function sw_timeday_metabox_output() {
 						<input type="checkbox" name="sw_instance_active_%s" %s>
 						<label for="sw_instance_active_%s">Active</label>
 					</span>',$i, $set_active === 'on' || $i === 0 ? 'checked="checked"' : '', $i);
-			printf('<a id="sw_timeday_delete_btn_%s" data-index="%s" class="button button-large button-primary sw_ins_delete_btn">-</a>', $i, $i);
+			printf('<a id="sw_timeday_delete_btn_%s" data-index="%s"
+				class="button button-large button-primary sw_ins_delete_btn">-</a>', $i, $i);
 			?>
 		</div>
 
 		<?php
-
 			printf( '<div id="sw_time_instance_%s">', $i );
 
 				printf( '<select name="sw_hour_%s">', $i );
 				for ( $hour = 1; $hour <= 12; $hour++ ) {
 					$print_hour = $hour < 10 ? '0' . $hour : $hour;
 					$selected = intval($print_hour) === intval($set_hour) ? 'selected="selected"' : '';
-					printf( '<option value="%s" %s %s>%s</option>', $print_hour, $selected, $print_hour, $print_hour );
+					printf( '<option value="%s" %s %s>%s</option>',
+						$print_hour, $selected, $print_hour, $print_hour );
 				}
 				echo '</select>';
 
@@ -76,7 +77,8 @@ function sw_timeday_metabox_output() {
 				for ( $minute = 0; $minute < 60; $minute += 5 ) {
 					$print_minute = $minute < 10 ? '0' . $minute : $minute;
 					$selected = intval($print_minute) === intval($set_minute) ? 'selected="selected"' : '';
-					printf( '<option value="%s" %s %s>%s</option>', $print_minute, $selected, $print_minute, $print_minute );
+					printf( '<option value="%s" %s %s>%s</option>',
+						$print_minute, $selected, $print_minute, $print_minute );
 				}
 				echo '</select>';
 
@@ -148,7 +150,7 @@ function sw_timeday_metabox_output() {
 							if( $(this).is('select') ) {
 								$(this)[0].selectedIndex = -1;
 							} else if ( $(this).is('input[type="checkbox"]:checked') &&
-										!$(this).is('[name^="sw_instance_active_"]')) {
+										!$(this).is('[name^="sw_instance_active_"]') ) {
 								$(this).click();
 							}
 						} else {
@@ -173,11 +175,15 @@ function sw_timeday_metabox_output() {
 			}
 
 			function sw_delete_instance( instance_id ) {
+				console.log('delete: enter');
+
 				var $ =jQuery.noConflict(),
-					delete_index = parseInt( $( instance_id ).attr('data-index') ),
-					swap_index = delete_index + 1,
 					ins_container = $('div#sw_timeday_inner'),
-					old_num_ins = parseInt ( ins_container.attr('data-instances') );
+					old_num_ins = parseInt( ins_container.attr('data-instances') ),
+					delete_index = parseInt( $( instance_id ).attr('data-index') ),
+					swap_index = delete_index === old_num_ins ? delete_index : delete_index + 1;
+
+				if( delete_index === 0 ) return;
 
 				$(instance_id).remove();
 
@@ -221,11 +227,11 @@ function sw_timeday_metabox_output() {
 
 					$.post( '<?php echo admin_url('admin-ajax.php'); ?>', data, function(response) {
 						//console.log('AJAX (sw_deleted_instances) - Response: ' + response + '\n' +
-						//		'Instances: ' + new_num_ins );
+						//		'Instances: ' + ( old_num_ins - 1 ) );
 					});
 				}
 
-				ins_container.attr( 'data-instances', old_num_ins - 1 );
+				ins_container.attr( 'data-instances', old_num_ins === 0 ? 0 : old_num_ins - 1 );
 
 				return old_num_ins === 0 ? 0 : old_num_ins - 1;
 			}
@@ -236,6 +242,7 @@ function sw_timeday_metabox_output() {
 				$( 'a#sw_add_instance_btn' ).bind( 'click', sw_add_instance );
 
 				$( 'a.sw_ins_delete_btn' ).live( 'click', function() {
+					console.log('delete: click');
 					var index = $(this).data( 'index'),
 						old_num_ins = $( 'div#sw_timeday_inner' ).attr( 'data-instances'),
 						new_num_ins = sw_delete_instance( '#sw_timeday_instance_' + index );
@@ -254,14 +261,15 @@ function sw_timeday_metabox_output() {
 ////////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
 
-function sw_timeday_metabox_save( $post_id ) {
+function sw_timeday_metabox_save( ) {
 	global $post;
 
 	// Stop the script when doing autosave
 	if( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) return;
 
 	// Verify the nonce. If insn't there, stop the script
-	if( !isset( $_POST['sw_timeday_metabox_nonce'] ) || !wp_verify_nonce( $_POST['sw_timeday_metabox_nonce'], 'my_sw_timeday_metabox_nonce' ) ) return;
+	if( !isset( $_POST['sw_timeday_metabox_nonce'] ) ||
+		!wp_verify_nonce( $_POST['sw_timeday_metabox_nonce'], 'my_sw_timeday_metabox_nonce' ) ) return;
 
 	// Stop the script if the user does not have edit permissions
 	if( !current_user_can( 'edit_post', get_the_id() ) ) return;
@@ -280,7 +288,7 @@ function sw_timeday_metabox_save( $post_id ) {
 		$ampm_field = 'sw_ampm_' . $i;
 		$time_fields = [ $hour_field, $minute_field, $ampm_field ];
 
-		foreach($time_fields as $time_field)
+		foreach( $time_fields as $time_field )
 			if( isset( $_POST[ $time_field ] ) )
 				update_post_meta( $post->ID, $time_field, esc_attr( $_POST[ $time_field ] ) );
 
@@ -290,8 +298,8 @@ function sw_timeday_metabox_save( $post_id ) {
 		}
 	}
 
-	delete_post_meta( $post->ID, '_deleted', true);
-	delete_post_meta( $post->ID, '_deleted_string', true);
+	delete_post_meta( $post->ID, '_deleted' );
+	delete_post_meta( $post->ID, '_deleted_string' );
 }
 
 add_action( 'save_post', 'sw_timeday_metabox_save' );

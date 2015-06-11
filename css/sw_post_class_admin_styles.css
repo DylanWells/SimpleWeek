@@ -30,6 +30,7 @@ div[id^="sw_day_instance_"] ul li span label {
     position: relative;
     bottom: 2px;
 }
+
 @media only screen and (min-width: 640px) {
     div[id^="sw_day_instance_"] ul {
         display: block;

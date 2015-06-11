@@ -62,6 +62,7 @@ class SW_ClassPost {
 
 		register_post_type('sw_class', $args);
 	}
+
 }
 
 add_action('init', function() {
