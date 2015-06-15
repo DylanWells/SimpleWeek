@@ -1,0 +1,121 @@
+form#sw_appearance_form {
+    padding: 20px;
+}
+h1.sw_settings_header {
+    text-align: left;
+}
+
+form#sw_appearance_form table.form-table th,
+form#sw_appearance_form table.form-table td {
+    box-sizing: border-box;
+    width: 50%;
+    padding: 0;
+}
+form#sw_appearance_form table.form-table th {
+    float: left;
+    bottom: -6px;
+    position: relative;
+    white-space: nowrap;
+    font-weight: 400;
+}
+form#sw_appearance_form table.form-table td {
+    float: right;
+    text-align: right;
+}
+
+div.sw_settings_top {
+    height: 40px;
+}
+form#sw_appearance_form p.submit {
+    clear: both;
+    text-align: right;
+    position: relative;
+    bottom: 55px;
+}
+
+@media only screen and (max-width: 390px) {
+    div.sw_settings_top {
+        height: 80px;
+        text-align: center;
+    }
+    form#sw_appearance_form p.submit {
+        text-align: center;
+        bottom: 11.5px;
+    }
+}
+
+@media only screen and (min-width: 500px) {
+
+    form#sw_appearance_form table {
+        width: 50%;
+    }
+    form#sw_appearance_form span#sw_section_config_advanced + table {
+        width: 100%;
+    }
+    form#sw_appearance_form table:first-of-type,
+    form#sw_appearance_form h3:first-of-type {
+        width: 50%;
+        float: left;
+    }
+    form#sw_appearance_form span#sw_section_appearance_font + table {
+        float: right;
+        clear: right;
+    }
+    form#sw_appearance_form h3:not(:first-of-type) {
+        position: absolute;
+        right: 0;
+        width: 50%;
+    }
+    form#sw_appearance_form table.form-table th {
+        /*width: auto;*/
+        padding-left: 20px;
+    }
+
+}
+
+@media only screen and (max-width: 782px) {
+
+}
+h2#sw_tab_wrapper {
+    text-align: center;
+}
+h2 .nav-tab {
+    font-weight: 400;
+}
+form#sw_appearance_form a:focus {
+    box-shadow: none;
+}
+
+
+
+form#sw_appearance_form h3,
+form#sw_appearance_form table.form-table,
+form#sw_appearance_form span[id^="sw_section"] {
+    display: none;
+}
+
+form#sw_appearance_form[data-active="sw_tab_appearance"] span[id^="sw_section_appearance"] {
+    display: block;
+}
+form#sw_appearance_form[data-active="sw_tab_appearance"] span[id^="sw_section_appearance"] + table.form-table {
+    display: table;
+}
+
+form#sw_appearance_form[data-active="sw_tab_options"] span[id^="sw_section_config"] {
+    display: block;
+}
+form#sw_appearance_form[data-active="sw_tab_options"] span[id^="sw_section_config"] + table.form-table {
+    display: table;
+}
+
+/* COLOR PICKER */
+form#sw_appearance_form .sw_color_picker_box a.wp-color-result,
+form#sw_appearance_form .sw_color_picker_box span.wp-picker-input-wrap {
+    margin: 0;
+}
+form#sw_appearance_form .wp-picker-container {
+    padding-right: 15px;
+}
+form#sw_appearance_form .wp-color-result {
+    white-space: nowrap;
+}

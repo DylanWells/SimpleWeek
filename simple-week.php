@@ -12,6 +12,9 @@ Author URI: http://dylandoes.com
 define( 'SIMPLEWEEK_PATH', dirname(__FILE__) );
 
 
+// Settings Page
+include SIMPLEWEEK_PATH . '/php/' . 'sw_admin_settings.php';
+
 // Post types
 include SIMPLEWEEK_PATH . '/php/' . 'sw_post_category.php';
 include SIMPLEWEEK_PATH . '/php/' . 'sw_post_class.php';
@@ -33,6 +36,7 @@ class SW_Init {
 	public static function sw_add_admin_menu() {
 		add_menu_page( 'SimpleWeek', 'SimpleWeek', 'manage_options',
 			__FILE__, array('SW_Init','sw_options_page'), 'dashicons-calendar', 65 );
+		SW_SettingsPage::sw_add_settings_page(__FILE__);
 		SW_CategoryPost::sw_add_submenu(__FILE__);
 		SW_ClassPost::sw_add_submenu(__FILE__);
 	}

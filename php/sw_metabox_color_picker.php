@@ -2,22 +2,22 @@
 
 // Thank you: http://javatechig.com/wordpress/how-to-implement-color-picker-with-wordpress
 
-function wdm_add_meta_box() {
-	add_meta_box('wdm_sectionid', 'Category Color', 'wdm_meta_box_callback', 'sw_category', 'normal', 'high');
+function sw_add_color_picker_metabox() {
+	add_meta_box('sw_color-picker-metabox', 'Category Color', 'sw_color_picker_output', 'sw_category', 'normal', 'high');
 }
 
-add_action( 'add_meta_boxes', 'wdm_add_meta_box' );
+add_action( 'add_meta_boxes', 'sw_add_color_picker_metabox' );
 
-function wdm_meta_box_callback( $post ) {
-	wp_nonce_field( 'wdm_meta_box', 'wdm_meta_box_nonce' );
-	$color = get_post_meta( $post->ID, 'post_bg', true );
+function sw_color_picker_output( $post ) {
+	wp_nonce_field( 'my_sw_color_picker_nonce', 'sw_color_picker_nonce' );
+	$color = get_post_meta( $post->ID, 'sw_cat_color', true );
 
 	?>
 
 	<div class="sw_color_picker_box">
 	<p>
 	<label>Select Category Color: </label><br>
-	<input class="color-field" type="text" name="post_bg" value="<?php echo '#'.$color; ?>"/>
+	<input class="color-field" type="text" name="sw_cat_color" value="<?php echo '#'.$color; ?>"/>
 	</p>
 	<div class="clear"></div>
 	</div>
@@ -26,7 +26,7 @@ function wdm_meta_box_callback( $post ) {
 		(function( $ ) {
 			// Add Color Picker to all inputs that have 'color-field' class
 			$(function() {
-				$('.color-field').wpColorPicker();
+				$('.color-field').wpColorPicker( { hide: true });
 			});
 		})( jQuery );
 	</script>
@@ -34,12 +34,12 @@ function wdm_meta_box_callback( $post ) {
 	<?php
 }
 
-function wdm_save_meta_box_data( $post_id ) {
-	if ( !isset( $_POST['wdm_meta_box_nonce'] ) ) {
+function sw_color_picker_save( $post_id ) {
+	if ( !isset( $_POST['sw_color_picker_nonce'] ) ) {
 		return;
 	}
 
-	if ( !wp_verify_nonce( $_POST['wdm_meta_box_nonce'], 'wdm_meta_box' ) ) {
+	if ( !wp_verify_nonce( $_POST['sw_color_picker_nonce'], 'my_sw_color_picker_nonce' ) ) {
 		return;
 	}
 	if ( defined( 'DOING_AUTOSAVE' ) && DOING_AUTOSAVE ) {
@@ -49,12 +49,12 @@ function wdm_save_meta_box_data( $post_id ) {
 		return;
 	}
 
-	$post_bg = ( isset( $_POST['post_bg'] ) ? sanitize_html_class( $_POST['post_bg'] ) : '' );
-	update_post_meta( $post_id, 'post_bg', $post_bg );
+	$sw_cat_color = ( isset( $_POST['sw_cat_color'] ) ? sanitize_html_class( $_POST['sw_cat_color'] ) : '' );
+	update_post_meta( $post_id, 'sw_cat_color', $sw_cat_color );
 }
 
 
-add_action( 'save_post', 'wdm_save_meta_box_data' );
+add_action( 'save_post', 'sw_color_picker_save' );
 
 function wpse_80236_Colorpicker(){
 	wp_enqueue_style( 'wp-color-picker');
