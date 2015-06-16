@@ -40,19 +40,22 @@ class SW_SettingsPage {
 
     public function sw_admin_settings_init(  ) {
 
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+        //////////////////////////////////////////////////////////////////
+
         register_setting( 'sw_options_group', 'sw_appearance' );
 
-        // COLOR SETTINGS
+        // STRUCTURE COLORS
         add_settings_section(
             'sw_section_colors_structure',
-            'Color Settings',
+            'Structure Colors',
             array($this,'sw_section_callback'),
             'sw_options_group'
         );
-
         add_settings_field(
             'sw_field_color_frame',
-            'Frame Color',
+            'Frame',
             array($this,'sw_color_picker_output'),
             'sw_options_group',
             'sw_section_colors_structure',
@@ -60,21 +63,9 @@ class SW_SettingsPage {
                 'option' => 'sw_appearance',
                 'field' => 'sw_field_color_frame')
         );
-
-        add_settings_field(
-            'sw_field_color_border',
-            'Background Color',
-            array($this,'sw_color_picker_output'),
-            'sw_options_group',
-            'sw_section_colors_structure',
-            array(
-                'option' => 'sw_appearance',
-                'field' => 'sw_field_color_border')
-        );
-
         add_settings_field(
             'sw_field_color_background',
-            'Border Color',
+            'Background',
             array($this,'sw_color_picker_output'),
             'sw_options_group',
             'sw_section_colors_structure',
@@ -82,24 +73,44 @@ class SW_SettingsPage {
                 'option' => 'sw_appearance',
                 'field' => 'sw_field_color_background')
         );
+        add_settings_field(
+            'sw_field_color_gaps',
+            'Gaps',
+            array($this,'sw_color_picker_output'),
+            'sw_options_group',
+            'sw_section_colors_structure',
+            array(
+                'option' => 'sw_appearance',
+                'field' => 'sw_field_color_gaps')
+        );
 
         // FONT COLORS
         add_settings_section(
             'sw_section_colors_font',
-            'Font Settings',
+            'Font Colors',
             array($this,'sw_section_callback'),
             'sw_options_group'
         );
-
         add_settings_field(
-            'sw_field_color_background',
-            'Font Color',
+            'sw_field_outer_font_color',
+            'Outer',
             array($this,'sw_color_picker_output'),
             'sw_options_group',
             'sw_section_colors_font',
             array(
                 'option' => 'sw_appearance',
-                'field' => 'sw_field_font_color'
+                'field' => 'sw_field_outer_font_color'
+            )
+        );
+        add_settings_field(
+            'sw_field_inner_font_color',
+            'Inner',
+            array($this,'sw_color_picker_output'),
+            'sw_options_group',
+            'sw_section_colors_font',
+            array(
+                'option' => 'sw_appearance',
+                'field' => 'sw_field_inner_font_color'
             )
         );
 
@@ -116,9 +127,9 @@ class SW_SettingsPage {
             array($this,'sw_section_callback'),
             'sw_options_group'
         );
-
+        // OUTER
         add_settings_field(
-            'sw_outer_font',
+            'sw_field_outer_font',
             'Font',
             array($this,'sw_dropdown_output'),
             'sw_options_group',
@@ -131,10 +142,37 @@ class SW_SettingsPage {
                 )
             )
         );
-
         add_settings_field(
-            'sw_font_size',
-            'Font Size',
+            'sw_field_outer_font_weight',
+            'Weight',
+            array($this,'sw_dropdown_output'),
+            'sw_options_group',
+            'sw_section_fonts_outer',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_outer_font_weight',
+                'selections' => array(
+                    'lighter', 'light', 'bold', 'bolder'
+                )
+            )
+        );
+        add_settings_field(
+            'sw_field_outer_font_transform',
+            'Transform',
+            array($this,'sw_dropdown_output'),
+            'sw_options_group',
+            'sw_section_fonts_outer',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_outer_font_transform',
+                'selections' => array(
+                    'none', 'lowercase', 'uppercase', 'all caps', 'small caps'
+                )
+            )
+        );
+        add_settings_field(
+            'sw_field_outer_font_size',
+            'Size',
             array($this,'sw_slider_output'),
             'sw_options_group',
             'sw_section_fonts_outer',
@@ -145,9 +183,109 @@ class SW_SettingsPage {
                 'output_id' => 'sw_outer_font_size_output',
                 'min' => 11,
                 'max' => 24,
-                'step' => 1
+                'step' => 1,
+                'suffix' => 'px'
             )
-
+        );
+        add_settings_field(
+            'sw_field_outer_font_spacing',
+            'Spacing',
+            array($this,'sw_slider_output'),
+            'sw_options_group',
+            'sw_section_fonts_outer',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_outer_font_spacing',
+                'input_id' => 'sw_field_outer_font_spacing_input',
+                'output_id' => 'sw_field_outer_font_spacing_output',
+                'min' => 11,
+                'max' => 24,
+                'step' => 1,
+                'suffix' => 'px'
+            )
+        );
+        // INNER
+        add_settings_section(
+            'sw_section_fonts_inner',
+            'Inner',
+            array($this,'sw_section_callback'),
+            'sw_options_group'
+        );
+        add_settings_field(
+            'sw_field_inner_font',
+            'Font',
+            array($this,'sw_dropdown_output'),
+            'sw_options_group',
+            'sw_section_fonts_inner',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_inner_font',
+                'selections' => array(
+                    'Arial', 'Helvetica', 'Times New Roman', 'Courier New'
+                )
+            )
+        );
+        add_settings_field(
+            'sw_field_inner_font_weight',
+            'Weight',
+            array($this,'sw_dropdown_output'),
+            'sw_options_group',
+            'sw_section_fonts_inner',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_inner_font_weight',
+                'selections' => array(
+                    'lighter', 'light', 'bold', 'bolder'
+                )
+            )
+        );
+        add_settings_field(
+            'sw_field_inner_font_transform',
+            'Transform',
+            array($this,'sw_dropdown_output'),
+            'sw_options_group',
+            'sw_section_fonts_inner',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_inner_font_transform',
+                'selections' => array(
+                    'none', 'lowercase', 'uppercase', 'all caps', 'small caps'
+                )
+            )
+        );
+        add_settings_field(
+            'sw_field_inner_font_size',
+            'Size',
+            array($this,'sw_slider_output'),
+            'sw_options_group',
+            'sw_section_fonts_inner',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_inner_font_size',
+                'input_id' => 'sw_inner_font_size_input',
+                'output_id' => 'sw_inner_font_size_output',
+                'min' => 11,
+                'max' => 24,
+                'step' => 1,
+                'suffix' => 'px'
+            )
+        );
+        add_settings_field(
+            'sw_field_inner_font_spacing',
+            'Spacing',
+            array($this,'sw_slider_output'),
+            'sw_options_group',
+            'sw_section_fonts_inner',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_inner_font_spacing',
+                'input_id' => 'sw_field_inner_font_spacing_input',
+                'output_id' => 'sw_field_inner_font_spacing_output',
+                'min' => 11,
+                'max' => 24,
+                'step' => 1,
+                'suffix' => 'px'
+            )
         );
 
         //////////////////////////////////////////////////////////////////
@@ -163,16 +301,26 @@ class SW_SettingsPage {
             array($this,'sw_section_callback'),
             'sw_options_group'
         );
-
         add_settings_field(
-            'sw_24h_time',
+            'sw_field_24h_time',
             '24 Hour Time',
             array($this,'sw_checkbox_output'),
             'sw_options_group',
             'sw_section_config_time',
             array(
                 'option' => 'sw_config',
-                'field' => 'sw_field_24_time'
+                'field' => 'sw_field_24h_time'
+            )
+        );
+        add_settings_field(
+            'sw_field_show_gaps',
+            'Show Gaps',
+            array($this,'sw_checkbox_output'),
+            'sw_options_group',
+            'sw_section_config_time',
+            array(
+                'option' => 'sw_config',
+                'field' => 'sw_field_show_gaps'
             )
         );
 
@@ -184,41 +332,25 @@ class SW_SettingsPage {
             array($this,'sw_section_callback'),
             'sw_options_group'
         );
-
         add_settings_field(
-            'sw_google_fonts_api_key',
+            'sw_field_google_fonts_api_key',
             'Google Fonts API Key',
             array($this,'sw_textarea_output'),
             'sw_options_group',
             'sw_section_config_advanced',
             array(
                 'option' => 'sw_config',
-                'field' => 'sw_field_google_api'
+                'field' => 'sw_field_google_fonts_api_key'
             )
         );
     }
+
     //////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////
-    // CALLBACKS
-    //////////////////////////////////////////////////////////////////
-    //////////////////////////////////////////////////////////////////
+    // SECTION CALLBACK
     //////////////////////////////////////////////////////////////////
 
     function sw_section_callback( $arg ) {
         echo '<span id="' . $arg['id'] . '" class="sw_settings_section_title">' . $arg['title'] . '</span>';
-    }
-
-    function sw_colors_callback( $arg ) {
-        echo '<span id="' . $arg['id'] . '"></span>';
-    }
-
-    function sw_config_callback( $arg ) {
-        echo '<span id="' . $arg['id'] . '"></span>';
-    }
-
-    function sw_fonts_callback( $arg ) {
-        echo '<span id="' . $arg['id'] . '"></span>';
     }
 
     //////////////////////////////////////////////////////////////////
@@ -228,6 +360,7 @@ class SW_SettingsPage {
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
+
     function sw_color_picker_output( $args ) {
         $option = get_option( $args['option'] );
         $field = $args['field'];
@@ -306,8 +439,13 @@ class SW_SettingsPage {
         $min = $args['min'];
         $max = $args['max'];
         $step = $args['step'];
+        $suffix = $args['suffix'];
 
-        $value = isset( $option[$field] ) ? $option[$field] : $min;
+        $value = empty( $option[$field] ) ? $min : $option[$field];
+
+        $value_suffix = $value . $suffix;
+
+
 
         ?>
 
@@ -321,16 +459,22 @@ class SW_SettingsPage {
                 <output id="<?php echo $output_id; ?>"
                         for="<?php echo $input_id; ?>"
                         value="<?php echo $value; ?>">
-                        <?php echo $value . 'px'; ?>
+                        <?php echo $value_suffix ?>
                 </output>
-                <input type="text" name="<?php echo $option_field;?>">
+                <input type="text" name="<?php echo $option_field;?>" value="<?php echo $value; ?>">
             <script>
                 $ = jQuery.noConflict();
                 $(function() {
-                    var id = '#' + '<?php echo $input_id; ?>';
+                    var id = '#' + '<?php echo $input_id; ?>',
+                        suffix = '<?php echo $suffix; ?>';
+
+                    console.log( '<?php echo $value; ?>' );
+
+                    $(this).next('output').html($(this).val() + suffix);
+                    $(this).nextAll('input[type="text"][name^="sw"]').first().val($(this).val());
 
                     $( id ).on("change mousemove", function() {
-                        $(this).next('output').html($(this).val() + 'px');
+                        $(this).next('output').html($(this).val() + suffix);
                         $(this).nextAll('input[type="text"][name^="sw"]').first().val($(this).val());
                     });
                 });

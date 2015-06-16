@@ -79,10 +79,11 @@ form#sw_settings_form p.submit {
 @media only screen and (max-width: 782px) {
 
 }
-h2#sw_tab_wrapper {
+form#sw_settings_form h2#sw_tab_wrapper {
     text-align: center;
+    margin: 0;
 }
-h2 .nav-tab {
+form#sw_settings_form h2 .nav-tab {
     font-weight: 400;
 }
 form#sw_settings_form a:focus {
@@ -150,16 +151,19 @@ form#sw_settings_form span.sw_settings_section_title {
     font-weight: bold;
     width: 50%;
     position: absolute;
-    padding-left: 20px;
+    padding-top: 30px;
 }
 form#sw_settings_form span.sw_settings_section_title + table.form-table {
-    margin-top: 47px;
+    margin-top: 60px;
 }
-form#sw_settings_form span[id^="sw_section_colors"].sw_settings_section_title + table.form-table,
-form#sw_settings_form span[id="sw_section_config_advanced"].sw_settings_section_title + table.form-table {
-    margin-top: 30px;
-}
+/*form#sw_settings_form span[id^="sw_section_colors"].sw_settings_section_title + table.form-table,*/
+/*form#sw_settings_form span[id="sw_section_config_advanced"].sw_settings_section_title + table.form-table {*/
+    /*margin-top: 30px;*/
+/*}*/
 @media only screen and (min-width: 500px) {
+    form#sw_settings_form span.sw_settings_section_title {
+        padding-left: 20px;
+    }
     form#sw_settings_form span#sw_section_colors_font.sw_settings_section_title {
         right: 0;
     }
