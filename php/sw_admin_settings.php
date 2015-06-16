@@ -46,7 +46,7 @@ class SW_SettingsPage {
         add_settings_section(
             'sw_section_colors_structure',
             'Color Settings',
-            array($this,'sw_colors_callback'),
+            array($this,'sw_section_callback'),
             'sw_options_group'
         );
 
@@ -87,7 +87,7 @@ class SW_SettingsPage {
         add_settings_section(
             'sw_section_colors_font',
             'Font Settings',
-            array($this,'sw_colors_callback'),
+            array($this,'sw_section_callback'),
             'sw_options_group'
         );
 
@@ -113,7 +113,7 @@ class SW_SettingsPage {
         add_settings_section(
             'sw_section_fonts_outer',
             'Outer',
-            array($this,'sw_fonts_callback'),
+            array($this,'sw_section_callback'),
             'sw_options_group'
         );
 
@@ -160,7 +160,7 @@ class SW_SettingsPage {
         add_settings_section(
             'sw_section_config_time',
             'Time',
-            array($this,'sw_config_callback'),
+            array($this,'sw_section_callback'),
             'sw_options_group'
         );
 
@@ -181,7 +181,7 @@ class SW_SettingsPage {
         add_settings_section(
             'sw_section_config_advanced',
             'Advanced',
-            array($this,'sw_config_callback'),
+            array($this,'sw_section_callback'),
             'sw_options_group'
         );
 
@@ -204,6 +204,10 @@ class SW_SettingsPage {
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
     //////////////////////////////////////////////////////////////////
+
+    function sw_section_callback( $arg ) {
+        echo '<span id="' . $arg['id'] . '" class="sw_settings_section_title">' . $arg['title'] . '</span>';
+    }
 
     function sw_colors_callback( $arg ) {
         echo '<span id="' . $arg['id'] . '"></span>';

@@ -50,12 +50,11 @@ form#sw_settings_form p.submit {
 }
 
 @media only screen and (min-width: 500px) {
-
     form#sw_settings_form table {
         width: 50%;
     }
     form#sw_settings_form span#sw_section_config_advanced + table {
-        width: 100%;
+        /*width: 100%;*/
     }
     form#sw_settings_form table:first-of-type,
     form#sw_settings_form h3:first-of-type {
@@ -75,7 +74,6 @@ form#sw_settings_form p.submit {
         /*width: auto;*/
         padding-left: 20px;
     }
-
 }
 
 @media only screen and (max-width: 782px) {
@@ -90,8 +88,6 @@ h2 .nav-tab {
 form#sw_settings_form a:focus {
     box-shadow: none;
 }
-
-
 
 form#sw_settings_form h3,
 form#sw_settings_form table.form-table,
@@ -145,4 +141,26 @@ form#sw_settings_form div.sw_slider_box output {
     width: 100%;
     text-align: center;
     display: inline-block;
+}
+
+/* SECTION TITLE */
+form#sw_settings_form span.sw_settings_section_title {
+    box-sizing: border-box;
+    font-size: 14px;
+    font-weight: bold;
+    width: 50%;
+    position: absolute;
+    padding-left: 20px;
+}
+form#sw_settings_form span.sw_settings_section_title + table.form-table {
+    margin-top: 47px;
+}
+form#sw_settings_form span[id^="sw_section_colors"].sw_settings_section_title + table.form-table,
+form#sw_settings_form span[id="sw_section_config_advanced"].sw_settings_section_title + table.form-table {
+    margin-top: 30px;
+}
+@media only screen and (min-width: 500px) {
+    form#sw_settings_form span#sw_section_colors_font.sw_settings_section_title {
+        right: 0;
+    }
 }
