@@ -6,7 +6,6 @@ class SW_SettingsPage {
     public function __construct() {
         $this->sw_admin_settings_init();
         add_action( 'admin_enqueue_scripts', array( 'SW_SettingsPage','sw_settings_page_admin_enqueue' ) );
-
     }
 
     public static function sw_add_settings_page( $parent ) {
@@ -19,6 +18,24 @@ class SW_SettingsPage {
         $admin_style_handle = 'sw_admin_settings_styles';
         wp_register_style( $admin_style_handle, $admin_style_src );
         wp_enqueue_style( $admin_style_handle, $admin_style_src, array(), false, false );
+
+//        $jq_dir = 'simple-week/vendor/jquery.mobile.custom/';
+//
+//        $jquery_mobile_custom_src = plugins_url( $jq_dir . 'jquery.mobile.custom.min.js');
+//        $jquery_mobile_custom_handle = 'sw_jquery_mobile_custom';
+//        wp_register_script( $jquery_mobile_custom_handle, $jquery_mobile_custom_src );
+//        wp_enqueue_script( $jquery_mobile_custom_handle, $jquery_mobile_custom_src, array(), '1.4.5', false);
+//
+//        $jquery_mobile_custom_struct_src = plugins_url( $jq_dir . 'jquery.mobile.custom.structure.css');
+//        $jquery_mobile_custom_struct_handle = 'sw_jquery_mobile_custom_structure';
+//        wp_register_script( $jquery_mobile_custom_struct_handle, $jquery_mobile_custom_struct_src );
+//        wp_enqueue_script( $jquery_mobile_custom_struct_handle, $jquery_mobile_custom_struct_src, array(), '1.4.5', false);
+//
+//        $jquery_mobile_custom_theme_src = plugins_url( $jq_dir . 'jquery.mobile.custom.theme.css');
+//        $jquery_mobile_custom_theme_handle = 'sw_jquery_mobile_custom_theme';
+//        wp_register_script( $jquery_mobile_custom_theme_handle, $jquery_mobile_custom_theme_src );
+//        wp_enqueue_script( $jquery_mobile_custom_theme_handle, $jquery_mobile_custom_theme_src, array(), '1.4.5', false);
+
     }
 
     public function sw_admin_settings_init(  ) {
@@ -115,12 +132,51 @@ class SW_SettingsPage {
             )
         );
 
+        add_settings_field(
+            'sw_font_size',
+            'Font Size',
+            array($this,'sw_slider_output'),
+            'sw_options_group',
+            'sw_section_fonts_outer',
+            array(
+                'option' => 'sw_fonts',
+                'field' => 'sw_field_outer_font_size',
+                'input_id' => 'sw_outer_font_size_input',
+                'output_id' => 'sw_outer_font_size_output',
+                'min' => 11,
+                'max' => 24,
+                'step' => 1
+            )
+
+        );
+
         //////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////
         //////////////////////////////////////////////////////////////////
 
         // CONFIG OPTIONS
         register_setting( 'sw_options_group', 'sw_config' );
+
+        add_settings_section(
+            'sw_section_config_time',
+            'Time',
+            array($this,'sw_config_callback'),
+            'sw_options_group'
+        );
+
+        add_settings_field(
+            'sw_24h_time',
+            '24 Hour Time',
+            array($this,'sw_checkbox_output'),
+            'sw_options_group',
+            'sw_section_config_time',
+            array(
+                'option' => 'sw_config',
+                'field' => 'sw_field_24_time'
+            )
+        );
+
+        // Advanced
 
         add_settings_section(
             'sw_section_config_advanced',
@@ -137,7 +193,7 @@ class SW_SettingsPage {
             'sw_section_config_advanced',
             array(
                 'option' => 'sw_config',
-                'field' => 'sw_field_color_frame'
+                'field' => 'sw_field_google_api'
             )
         );
     }
@@ -218,6 +274,65 @@ class SW_SettingsPage {
                 ?>
             </select>
         </div>
+        <?php
+    }
+
+    function sw_checkbox_output( $args ) {
+        $option = get_option( $args['option'] );
+        $field = $args['field'];
+        $option_field = $args['option'] . '[' . $field . ']';
+
+        ?>
+            <div class="sw_checkbox_box">
+                <?php
+                    $checked = $option[$field] === 'on' ? 'checked="checked"' : '';
+                    printf('<input type="checkbox" name=%s" %s/>', $option_field, $checked);
+                ?>
+            </div>
+        <?php
+    }
+
+    function sw_slider_output( $args ) {
+        $option = get_option( $args['option'] );
+        $field = $args['field'];
+        $option_field = $args['option'] . '[' . $field . ']';
+
+        $input_id = $args['input_id'];
+        $output_id = $args['output_id'];
+        $min = $args['min'];
+        $max = $args['max'];
+        $step = $args['step'];
+
+        $value = isset( $option[$field] ) ? $option[$field] : $min;
+
+        ?>
+
+        <div class="sw_slider_box">
+                <input type="range"
+                       id="<?php echo $input_id; ?>"
+                       min="<?php echo $min; ?>"
+                       max="<?php echo $max; ?>"
+                       step="<?php echo $step; ?>"
+                       value="<?php echo $value; ?>" />
+                <output id="<?php echo $output_id; ?>"
+                        for="<?php echo $input_id; ?>"
+                        value="<?php echo $value; ?>">
+                        <?php echo $value . 'px'; ?>
+                </output>
+                <input type="text" name="<?php echo $option_field;?>">
+            <script>
+                $ = jQuery.noConflict();
+                $(function() {
+                    var id = '#' + '<?php echo $input_id; ?>';
+
+                    $( id ).on("change mousemove", function() {
+                        $(this).next('output').html($(this).val() + 'px');
+                        $(this).nextAll('input[type="text"][name^="sw"]').first().val($(this).val());
+                    });
+                });
+            </script>
+        </div>
+
         <?php
     }
     //////////////////////////////////////////////////////////////////

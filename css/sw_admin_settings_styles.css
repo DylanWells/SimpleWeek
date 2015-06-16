@@ -133,3 +133,16 @@ form#sw_settings_form .wp-picker-container {
 form#sw_settings_form .wp-color-result {
     white-space: nowrap;
 }
+
+/* SLIDER SHIT */
+form#sw_settings_form div.sw_slider_box input[type="text"] {
+    display: none;
+}
+form#sw_settings_form div.sw_slider_box input[type="range"] {
+    width: 100%;
+}
+form#sw_settings_form div.sw_slider_box output {
+    width: 100%;
+    text-align: center;
+    display: inline-block;
+}

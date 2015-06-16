@@ -83,3 +83,4 @@ div#sw_timeday_inner div#sw_timeday_instance_0.sw_blank_instance {
 div#sw_timeday_inner div[id^="sw_timeday_instance_"]:last-child hr.sw_instance_divider{
     display: none;
 }
+
